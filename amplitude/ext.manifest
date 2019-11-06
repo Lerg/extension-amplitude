@@ -1,0 +1,9 @@
+name: "amplitude"
+
+platforms:
+    arm64-ios:
+        context:
+            linkFlags:  ["-ObjC"]
+    armv7-ios:
+        context:
+            linkFlags:  ["-ObjC"]
