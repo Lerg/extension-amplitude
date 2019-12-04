@@ -18,6 +18,7 @@
 static ExtensionInterface *extension_instance;
 int EXTENSION_INIT(lua_State *L) {return [extension_instance init_:L];}
 int EXTENSION_TRACK_EVENT(lua_State *L) {return [extension_instance track_event:L];}
+int EXTENSION_SET_USER_PROPERTY(lua_State *L) {return [extension_instance set_user_property:L];}
 
 -(id)init:(lua_State*)L {
 	self = [super init];
@@ -83,6 +84,39 @@ int EXTENSION_TRACK_EVENT(lua_State *L) {return [extension_instance track_event:
 		[[Amplitude instance] logEvent:name withEventProperties:event_properties];
 	} else {
 		[[Amplitude instance] logEvent:name];
+	}
+
+	return 0;
+}
+
+// amplitude.set_user_property(params)
+-(int)set_user_property:(lua_State*)L {
+	[Utils check_arg_count:L count:1];
+	if (![self check_is_initialized]) {
+		return 0;
+	}
+
+	Scheme *scheme = [[Scheme alloc] init];
+	[scheme string:@"name"];
+	[scheme string:@"string"];
+	[scheme number:@"number"];
+
+	Table *params = [[Table alloc] init:L index:1];
+	[params parse:scheme];
+
+	NSString *name = [params get_string_not_null:@"name"];
+	NSString *string = [params get_string:@"string"];
+	NSNumber *number = [params get_double:@"number"];
+
+	AMPIdentify *identify = NULL;
+	if (string) {
+		identify = [[AMPIdentify identify] set:name value:string];
+	} else if (number) {
+		identify = [[AMPIdentify identify] set:name value:number];
+	}
+
+	if (identify != NULL) {
+		[[Amplitude instance] identify:identify];
 	}
 
 	return 0;

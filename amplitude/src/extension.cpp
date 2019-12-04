@@ -5,6 +5,7 @@
 static const luaL_reg lua_functions[] = {
 	{"init", EXTENSION_INIT},
 	{"track_event", EXTENSION_TRACK_EVENT},
+	{"set_user_property", EXTENSION_SET_USER_PROPERTY},
 	{0, 0}
 };
 

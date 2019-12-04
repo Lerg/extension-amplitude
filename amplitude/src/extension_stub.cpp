@@ -12,6 +12,11 @@ int EXTENSION_TRACK_EVENT(lua_State *L) {
 	return 0;
 }
 
+int EXTENSION_SET_USER_PROPERTY(lua_State *L) {
+	dmLogInfo("set_user_property");
+	return 0;
+}
+
 void EXTENSION_INITIALIZE(lua_State *L) {
 }
 
